@@ -1,0 +1,29 @@
+{
+  "name": "infra",
+  "version": "1.0.0",
+  "description": "Infrastructure as code using AWS CDK",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "cdk": "cdk",
+    "bootstrap": "cdk bootstrap",
+    "deploy": "cdk deploy",
+    "destroy": "cdk destroy",
+    "synth": "cdk synth"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.8.0",
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "aws-cdk": "^2.139.0",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.8.3"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.139.0",
+    "@aws-cdk/aws-apprunner-alpha": "^2.139.0-alpha.0",
+    "constructs": "^10.3.0"
+  }
+}
