@@ -9,6 +9,10 @@
 			"path": "../apps/backend"
 		},
 		{
+			"name": "frontend",
+			"path": "../apps/frontend"
+		},
+		{
 			"name": "infra",
 			"path": "../infra"
 		}
