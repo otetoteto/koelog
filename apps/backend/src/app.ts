@@ -1,18 +1,13 @@
 import { createNodeWebSocket } from "@hono/node-ws";
 import { Hono } from "hono";
-import { cors } from "hono/cors";
 
-export const app = new Hono();
-
-app.use("*", cors({ origin: ["http://localhost:5172"] }));
-
-app.get("/", (c) => c.text("Hello World!"));
+const base = new Hono();
 
 const { upgradeWebSocket } = createNodeWebSocket({
-  app: app,
+  app: base,
 });
 
-const wsApp = app.get(
+export const app = base.get(
   "/ws",
   upgradeWebSocket((c) => {
     return {
@@ -27,4 +22,4 @@ const wsApp = app.get(
   }),
 );
 
-export type App = typeof wsApp;
+export type App = typeof app;
