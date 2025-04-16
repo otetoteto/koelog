@@ -4,8 +4,13 @@
   "author": "otetoteto",
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "biome check",
+    "fix": "biome check --write",
+    "typecheck": "pnpm --filter \"./apps/**\" --filter \"./infra\" typecheck"
   },
   "license": "ISC",
-  "packageManager": "pnpm@10.8.0"
+  "packageManager": "pnpm@10.8.0",
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4"
+  }
 }
