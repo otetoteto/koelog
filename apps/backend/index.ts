@@ -1,1 +1,1 @@
-export type { App as HonoApp } from "./src/app"
+export type { App as HonoApp } from "./src/app";

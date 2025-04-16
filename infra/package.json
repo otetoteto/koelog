@@ -1,5 +1,5 @@
 {
-  "name": "infra",
+  "name": "@koelog/infra",
   "version": "1.0.0",
   "description": "Infrastructure as code using AWS CDK",
   "main": "index.js",
@@ -9,7 +9,8 @@
     "bootstrap": "cdk bootstrap",
     "deploy": "cdk deploy",
     "destroy": "cdk destroy",
-    "synth": "cdk synth"
+    "synth": "cdk synth",
+    "typecheck": "tsc"
   },
   "keywords": [],
   "author": "",

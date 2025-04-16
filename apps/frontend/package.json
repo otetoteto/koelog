@@ -1,12 +1,13 @@
 {
-  "name": "tanstack-start-example-basic",
+  "name": "@koelog/frontend",
   "private": true,
   "sideEffects": false,
   "type": "module",
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
-    "start": "vinxi start"
+    "start": "vinxi start",
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@koelog/backend": "workspace:*",
