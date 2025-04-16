@@ -10,6 +10,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@aws-sdk/client-transcribe-streaming": "^3.787.0",
     "@koelog/backend": "workspace:*",
     "@tanstack/react-router": "^1.115.3",
     "@tanstack/react-router-devtools": "^1.115.3",

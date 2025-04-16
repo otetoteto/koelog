@@ -1,7 +1,12 @@
 import { defineConfig } from "@tanstack/react-start/config";
 import tsConfigPaths from "vite-tsconfig-paths";
 
-export default defineConfig({
+const app = await defineConfig({
+  server: {
+    experimental: {
+      websocket: true,
+    },
+  },
   tsr: {
     appDirectory: "src",
   },
@@ -13,3 +18,13 @@ export default defineConfig({
     ],
   },
 });
+
+app.addRouter({
+  name: "websocket",
+  type: "http",
+  handler: "./src/websocket.ts",
+  target: "server",
+  base: "/ws",
+});
+
+export default app;
