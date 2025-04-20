@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { AudioInputDeviceSelect } from "~/components/AudioInputDeviceSelect";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -9,8 +10,10 @@ function Home() {
   const [stopFn, setStopFn] = useState<(() => void) | null>(null);
   const [text, setText] = useState("");
 
+  const [deviceId, setDeviceId] = useState<string | null>(null);
+
   const handleAudioStart = async () => {
-    const stop = await startAudioStreaming((message) => {
+    const stop = await startAudioStreaming(deviceId, (message) => {
       setText((prev) => prev + message);
     });
     setStopFn(() => stop);
@@ -25,25 +28,36 @@ function Home() {
     setText("");
   };
 
+  const handleChangeDevice = (id: string) => {
+    setDeviceId(id);
+  };
+
   return (
     <div className="p-2">
       <h3>Welcome Home!!!</h3>
-      <button type="button" disabled={stopFn !== null} onClick={handleAudioStart}>
-        録音
-      </button>
-      <button type="button" disabled={stopFn === null} onClick={handleAudioStop}>
-        停止
-      </button>
-      <button type="button" onClick={handleAudioClear}>
-        クリア
-      </button>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 100px) 1fr", gap: "1rem" }}>
+        <button type="button" disabled={stopFn !== null} onClick={handleAudioStart}>
+          録音
+        </button>
+        <button type="button" disabled={stopFn === null} onClick={handleAudioStop}>
+          停止
+        </button>
+        <button type="button" onClick={handleAudioClear}>
+          クリア
+        </button>
+        <Suspense fallback={<p>loading...</p>}>
+          <AudioInputDeviceSelect value={deviceId} onChange={handleChangeDevice} />
+        </Suspense>
+      </div>
       <p>{text}</p>
     </div>
   );
 }
 
-export async function startAudioStreaming(onMessage: (msg: string) => void) {
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+export async function startAudioStreaming(deviceId: string | null, onMessage: (msg: string) => void) {
+  const stream = await navigator.mediaDevices.getUserMedia({
+    audio: deviceId ? { deviceId: { exact: deviceId } } : true,
+  });
   const audioContext = new AudioContext({ sampleRate: 16000 });
   const source = audioContext.createMediaStreamSource(stream);
 

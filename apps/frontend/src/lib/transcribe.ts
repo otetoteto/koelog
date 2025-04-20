@@ -17,15 +17,14 @@ export async function transcribeAudio(
   });
 
   const response = await client.send(command);
-  console.log("[res]", response);
   if (response.TranscriptResultStream === undefined) {
     throw new Error("No transcript result stream");
   }
 
   for await (const event of response.TranscriptResultStream) {
-    console.log("[event]", event);
     if (event.TranscriptEvent?.Transcript?.Results?.[0]) {
       const result = event.TranscriptEvent.Transcript.Results[0];
+      console.log("[result]", result.Alternatives);
       if (!result.IsPartial) {
         const transcription = result.Alternatives?.[0]?.Transcript || "";
         if (transcription) {

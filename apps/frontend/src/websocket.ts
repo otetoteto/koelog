@@ -1,5 +1,6 @@
 import { defineWebSocket, eventHandler } from "@tanstack/react-start/server";
 import { getClient, transcribeAudio } from "./lib/transcribe";
+import { BadRequestException } from "@aws-sdk/client-transcribe-streaming";
 
 const audioChunks: Int16Array[] = [];
 
@@ -12,7 +13,7 @@ const r = new ReadableStream<Int16Array>({
           controller.enqueue(chunk);
         }
       } else {
-        await new Promise((resolve) => setTimeout(resolve, 50));
+        await new Promise((resolve) => setTimeout(resolve, 10));
       }
     }
   },
@@ -32,15 +33,21 @@ const handler = eventHandler({
   websocket: defineWebSocket({
     async open(peer) {
       console.log("WebSocket opened");
-      transcribeAudio(client, audioStream(), (text) => {
-        peer.send(JSON.stringify({ type: "transcription", data: text }));
-      });
+      try {
+        transcribeAudio(client, audioStream(), (text) => {
+          peer.send(JSON.stringify({ type: "transcription", data: text }));
+        });
+      } catch (error) {
+        if (error instanceof BadRequestException) {
+          console.log("BadRequestException", error);
+        }
+        console.error("Unknown Error", error);
+      }
     },
     async message(peer, event) {
       if (event.data instanceof Buffer) {
         const audioData = Int16Array.from(event.data);
         audioChunks.push(audioData);
-        console.log("Received audio data:", audioChunks.length);
       }
     },
     async close(event) {
