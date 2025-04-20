@@ -8,6 +8,7 @@ export async function transcribeAudio(
   client: TranscribeStreamingClient,
   audioStream: AsyncIterable<Int16Array>,
   onTranscription: (text: string) => void,
+  signal?: AbortSignal,
 ) {
   const command = new StartStreamTranscriptionCommand({
     LanguageCode: "ja-JP",
@@ -16,7 +17,7 @@ export async function transcribeAudio(
     AudioStream: transformAudioStream(audioStream),
   });
 
-  const response = await client.send(command);
+  const response = await client.send(command, { abortSignal: signal });
   if (response.TranscriptResultStream === undefined) {
     throw new Error("No transcript result stream");
   }
