@@ -104,7 +104,8 @@ export async function startAudioStreaming(deviceId: string | null, onMessage: (m
 
   const workletNode = new AudioWorkletNode(audioContext, "pcm-worklet-processor");
 
-  const ws = new WebSocket("ws://localhost:3000/ws");
+  const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+  const ws = new WebSocket(`${wsProtocol}://${window.location.hostname}:${window.location.port}/ws`);
 
   ws.addEventListener("open", () => {
     console.log("WebSocket connected");

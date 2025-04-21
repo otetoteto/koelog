@@ -7,18 +7,16 @@ RUN corepack enable pnpm
 WORKDIR /app
 
 # --------------
-FROM base AS dependencies
+FROM base AS builder
 COPY . .
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 COPY . .
-RUN pnpm --filter backend deploy --prod deploy/backend
+RUN pnpm --filter @koelog/frontend build
 
 # --------------
 FROM base AS runner
-COPY --from=dependencies /app/deploy/backend/node_modules/ /app/apps/backend/node_modules
-COPY apps/backend/package.json /app/apps/backend/package.json
-COPY apps/backend/src /app/apps/backend/src
+COPY --from=builder /app/apps/frontend/.output/ /app/apps/frontend
 
-WORKDIR /app/apps/backend
+WORKDIR /app/apps/frontend
 EXPOSE 3000
-CMD ["node", "src/main.ts"]
+CMD ["node", "./server/index.mjs"]
