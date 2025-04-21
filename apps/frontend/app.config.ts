@@ -1,5 +1,6 @@
 import { defineConfig } from "@tanstack/react-start/config";
 import tsConfigPaths from "vite-tsconfig-paths";
+import tailwindcss from "@tailwindcss/vite";
 
 const app = await defineConfig({
   server: {
@@ -12,6 +13,7 @@ const app = await defineConfig({
   },
   vite: {
     plugins: [
+      tailwindcss(),
       tsConfigPaths({
         projects: ["./tsconfig.json"],
       }),

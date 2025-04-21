@@ -1,6 +1,12 @@
 import { atom, useAtomValue } from "jotai";
 
 const audioInputDevicesAtom = atom(async () => {
+  if (typeof navigator === "undefined" || typeof navigator.mediaDevices === "undefined") {
+    return {
+      audioInputDevices: [],
+      defaultId: "",
+    };
+  }
   const devices = await navigator.mediaDevices.enumerateDevices();
   const audioInputDevices = devices.filter((device) => device.kind === "audioinput");
   const defaultGroupId = audioInputDevices.find((device) => device.deviceId === "default")?.groupId;
@@ -8,7 +14,10 @@ const audioInputDevicesAtom = atom(async () => {
     (device) => device.groupId === defaultGroupId && device.deviceId !== "default",
   )?.deviceId;
   if (defaultId === undefined) {
-    throw new Error("defaultId not found");
+    return {
+      audioInputDevices: [],
+      defaultId: "",
+    };
   }
   return {
     audioInputDevices: audioInputDevices.filter((device) => device.deviceId !== "default"),
@@ -24,7 +33,11 @@ export function AudioInputDeviceSelect({ value, onChange }: { value: string | nu
   };
 
   return (
-    <select onChange={handleChange} value={value ?? defaultId}>
+    <select
+      onChange={handleChange}
+      value={value ?? defaultId}
+      className="px-2 py-1 bg-gray-600 dark:bg-gray-700 rounded text-white uppercase font-extrabold"
+    >
       {audioInputDevices.map((device) => (
         <option key={device.deviceId} value={device.deviceId}>
           {device.label}

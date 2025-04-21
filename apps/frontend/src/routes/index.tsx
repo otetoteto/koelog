@@ -33,24 +33,43 @@ function Home() {
   };
 
   return (
-    <div className="p-2">
-      <h3>Welcome Home!!!</h3>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 100px) 1fr", gap: "1rem" }}>
-        <button type="button" disabled={stopFn !== null} onClick={handleAudioStart}>
+    <div className="px-8 py-16 grid place-items-center grid-rows-[max-content,max-content,1fr] gap-8 h-full max-w-[960px]">
+      <h1 className="text-6xl font-bold">声ログ</h1>
+      <div className="grid grid-cols-[repeat(3,100px)1fr] gap-1">
+        <Button disabled={stopFn !== null} onClick={handleAudioStart}>
           録音
-        </button>
-        <button type="button" disabled={stopFn === null} onClick={handleAudioStop}>
+        </Button>
+        <Button disabled={stopFn === null} onClick={handleAudioStop}>
           停止
-        </button>
-        <button type="button" onClick={handleAudioClear}>
-          クリア
-        </button>
+        </Button>
+        <Button onClick={handleAudioClear}>クリア</Button>
         <Suspense fallback={<p>loading...</p>}>
           <AudioInputDeviceSelect value={deviceId} onChange={handleChangeDevice} />
         </Suspense>
       </div>
-      <p>{text}</p>
+      <p className="border border-gray-300 rounded-lg p-4 h-full w-full">{text || "音声がここに表示されます"}</p>
     </div>
+  );
+}
+
+function Button({
+  children,
+  disabled,
+  onClick,
+}: {
+  children: React.ReactNode;
+  disabled?: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={onClick}
+      className="px-2 py-1 bg-gray-600 dark:bg-gray-700 rounded cursor-pointer disabled:cursor-not-allowed text-white uppercase font-extrabold disabled:opacity-50"
+    >
+      {children}
+    </button>
   );
 }
 

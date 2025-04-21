@@ -5,10 +5,6 @@
       "path": ".."
     },
     {
-      "name": "backend",
-      "path": "../apps/backend"
-    },
-    {
       "name": "frontend",
       "path": "../apps/frontend"
     },
